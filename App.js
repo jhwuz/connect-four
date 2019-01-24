@@ -75,7 +75,9 @@ export default class App extends Component<Props> {
      }
      else{
        return <TouchableHighlight onPress = {() => this.handleClick(row, column)}>
-         <View style={styles.tile}/>
+         <View style={styles.tile}>
+           <Icon name={"circle"}  style = {styles.white}/>
+         </View>
        </TouchableHighlight>
      }
    }
@@ -189,6 +191,11 @@ const styles = StyleSheet.create({
   red: {
     fontSize: 45,
     color: 'red',
+    textAlign: 'center'
+  },
+  white: {
+    fontSize: 45,
+    color: 'white',
     textAlign: 'center'
   },
   row: {
