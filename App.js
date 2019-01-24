@@ -7,69 +7,13 @@ import {Button, Alert, TouchableHighlight} from 'react-native'
 
 type Props = {};
 
-// class Square extends Component<Props>{
-//   constructor(props){
-//     super(props)
-//     this.makeSquare.bind(this)
-//     this.state = {
-//       i: null,
-//       j: null
-//     }
-//   }
-//
-//   makeSquare(){
-//     if (this.i == null || this.j == null){
-//       return <View style={styles.tile}/>
-//     }
-//     const row = this.i;
-//     const col = this.j
-//     const redOrYellow = this.props.board[row][col]
-//     if (redOrYellow == 1){
-//       return <TouchableHighlight onPress = {this.props._onPressButton(row, col)}>
-//         <View style={styles.tile}>
-//           <Icon name={"circle"}  style = {styles.red}/>
-//         </View>
-//       </TouchableHighlight>
-//     }
-//     else if (redOrYellow == 2) {
-//       return <TouchableHighlight onPress = {this.props._onPressButton(row, col)}>
-//         <View style={styles.tile}>
-//           <Icon name={"circle"}  style = {styles.red}/>
-//         </View>
-//       </TouchableHighlight>
-//     }
-//     else{
-//       return <TouchableHighlight onPress = {this.props._onPressButton(row, col)}>
-//         <View style={styles.tile}/>
-//       </TouchableHighlight>
-//     }
-//   }
-// }
-
 export default class App extends Component<Props> {
-
-  handleClick(i, j){
-    let temp = this.state.board
-    if (this.redTurn) {
-      temp[i][j] = 1
-    }
-    else{
-      temp[i][j] = 2
-    }
-    let flipTurn = this.redTurn
-      this.setState({
-        board : temp,
-        redTurn : !flipTurn
-      })
-
-    }
-
 
   constructor(props){
     super(props);
     this.state = {
       board: [
-          [0, 2, 1, 2, 1, 2, 1],
+          [0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
@@ -81,7 +25,26 @@ export default class App extends Component<Props> {
       yellowScore: 0,
   }}
 
-   square(row, column){
+  handleClick(i, j){
+    if (this.state.board[i][j] == 1 || this.state.board[i][j] == 2){ //don't allow a move to be overwritten
+      return;
+    }
+    let temp = this.state.board
+    let flipTurn = this.state.redTurn
+    if (flipTurn) {
+      temp[i][j] = 1
+    }
+    else{
+      temp[i][j] = 2
+    }
+    this.setState({
+      board : temp,
+      redTurn : !flipTurn
+    })
+
+  }
+
+  square(row, column){
     const redOrYellow = this.state.board[row][column]
      if (redOrYellow == 1){
        return <TouchableHighlight onPress = {() => this.handleClick(row, column)}>
