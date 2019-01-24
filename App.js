@@ -11,6 +11,7 @@ export default class App extends Component<Props> {
 
   constructor(props){
     super(props);
+    this.handleClick = this.handleClick.bind(this)
     this.state = {
       board: [
           [0, 0, 0, 0, 0, 0, 0],
@@ -26,16 +27,28 @@ export default class App extends Component<Props> {
   }}
 
   handleClick(i, j){
-    if (this.state.board[i][j] == 1 || this.state.board[i][j] == 2){ //don't allow a move to be overwritten
+    let temp = this.state.board
+    var col = j
+    var row = i
+    if (row < 5){ //find the lowest position without a disk and slide down
+        while(temp[row+1][col] !== 1 && temp[row+1][col] !== 2) { //iterate through to the lowest open square
+          row++
+          if (row == 5){
+            break
+          }
+        }
+    }
+
+    if (this.state.board[row][col] === 1 || this.state.board[row][col] === 2){ //don't allow a move to be overwritten
       return;
     }
-    let temp = this.state.board
+
     let flipTurn = this.state.redTurn
     if (flipTurn) {
-      temp[i][j] = 1
+      temp[row][col] = 1
     }
     else{
-      temp[i][j] = 2
+      temp[row][col] = 2
     }
     this.setState({
       board : temp,
