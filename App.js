@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import {Button, Alert} from 'react-native'
+import {Button, Alert, TouchableHighlight} from 'react-native'
+
 
 
 type Props = {};
@@ -63,30 +64,23 @@ export default class App extends Component<Props> {
    square(row, column){
     const redOrYellow = this.state.board[row][column]
      if (redOrYellow == 1){
-       return <View style={styles.tile}>
+       return <TouchableHighlight onPress = {this._onPressButton}>
+       <View style={styles.tile}>
        <Icon name={"circle"}  style = {styles.red}/>
-         <Button
-             onPress={this._onPressButton}
-             title=""
-              style = {styles.button}/>
        </View>
+       </TouchableHighlight>
      }
      else if (redOrYellow == 2) {
-       return <View style={styles.tile}>
-         <Icon name={"circle"}  style = {styles.yellow}/>
-         <Button
-             onPress={this._onPressButton}
-             title=""
-             style = {styles.button}/>
-       </View>
+       return <TouchableHighlight onPress = {this._onPressButton}>
+         <View style={styles.tile}>
+           <Icon name={"circle"}  style = {styles.yellow}/>
+         </View>
+       </TouchableHighlight>
      }
      else{
-       return <View style={styles.tile}>
-         <Button
-             onPress={this._onPressButton}
-             title=""
-             style = {styles.button}/>
-       </View>
+       return <TouchableHighlight onPress = {this._onPressButton}>
+         <View style={styles.tile}/>
+       </TouchableHighlight>
      }
    }
 
@@ -105,52 +99,53 @@ export default class App extends Component<Props> {
           {this.square(0, 5)}
           {this.square(0, 6)}
         </View>
+        <View style={styles.row}>
+          {this.square(0, 0)}
+          {this.square(0, 1)}
+          {this.square(0, 2)}
+          {this.square(0, 3)}
+          {this.square(0, 4)}
+          {this.square(0, 5)}
+          {this.square(0, 6)}
+        </View>
+        <View style={styles.row}>
+          {this.square(0, 0)}
+          {this.square(0, 1)}
+          {this.square(0, 2)}
+          {this.square(0, 3)}
+          {this.square(0, 4)}
+          {this.square(0, 5)}
+          {this.square(0, 6)}
+        </View>
+        <View style={styles.row}>
+          {this.square(0, 0)}
+          {this.square(0, 1)}
+          {this.square(0, 2)}
+          {this.square(0, 3)}
+          {this.square(0, 4)}
+          {this.square(0, 5)}
+          {this.square(0, 6)}
+        </View>
+        <View style={styles.row}>
+          {this.square(0, 0)}
+          {this.square(0, 1)}
+          {this.square(0, 2)}
+          {this.square(0, 3)}
+          {this.square(0, 4)}
+          {this.square(0, 5)}
+          {this.square(0, 6)}
+        </View>
+        <View style={styles.row}>
+          {this.square(0, 0)}
+          {this.square(0, 1)}
+          {this.square(0, 2)}
+          {this.square(0, 3)}
+          {this.square(0, 4)}
+          {this.square(0, 5)}
+          {this.square(0, 6)}
+        </View>
 
-        <View style={{flexDirection: "row"}}>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-        </View>
-        <View style={{flexDirection: "row"}}>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-        </View>
-        <View style={{flexDirection: "row"}}>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-        </View>
-        <View style={{flexDirection: "row"}}>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-        </View>
-        <View style={{flexDirection: "row"}}>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-          <View style={styles.tile}/>
-        </View>
+
 
         <Text style={styles.leaderboard}>
           Player 1's Score: {this.state.redScore}
@@ -179,6 +174,7 @@ const styles = StyleSheet.create({
   button: {
     width: 50,
     height: 50,
+    color : 'transparent'
   },
   header: {
     fontSize: 50,
