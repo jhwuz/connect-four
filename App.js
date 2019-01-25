@@ -2,8 +2,15 @@ import React, {Component} from 'react';
 import {Alert, Button, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
+const SQUARE_WHITE = 0;
 const SQUARE_RED = 1;
 const SQUARE_YELLOW = 2;
+
+const SQUARE_MAP = {
+  [SQUARE_WHITE]: 'white',
+  [SQUARE_RED]: 'red',
+  [SQUARE_YELLOW]: 'yellow'
+};
 
 export default class App extends Component {
 
@@ -20,7 +27,7 @@ export default class App extends Component {
     }
   }
 
-  generateBoard () {
+  generateBoard() {
     return new Array(6).fill(null).map(() => new Array(7).fill(0));
   }
 
@@ -44,7 +51,7 @@ export default class App extends Component {
       while (board[row + 1][col] !== 1 && board[row + 1][col] !== 2) { //iterate through to the lowest open square
         row++;
         if (row == 5) {
-          break
+          break;
         }
       }
     }
@@ -56,95 +63,95 @@ export default class App extends Component {
     let flipTurn = this.state.redTurn;
     let turnCount = this.state.turnCount;
     if (flipTurn) {
-      board[row][col] = 1
+      board[row][col] = 1;
     } else {
-      board[row][col] = 2
+      board[row][col] = 2;
     }
     this.setState({
       board: board,
       redTurn: !flipTurn,
       turnCount: turnCount + 1
-    })
-    this.checkWinner(row, col)
+    });
+    this.checkWinner(row, col);
   }
 
   checkWinner(i, j) {
     const board = this.state.board
-    const currPlayer = board[i][j]
+    const color = board[i][j]
     const redScore = this.state.redScore
     const yellowScore = this.state.yellowScore
 
     if (i < 5) { //if possible, traverse down
-      let tempRow = i;
+      let traverseRow = i;
 
-      while (board[tempRow + 1][j] === currPlayer) {
-        tempRow++;
-        if (tempRow === 5) { //don't go past last element
-          break
+      while (board[traverseRow + 1][j] === color) {
+        traverseRow++;
+        if (traverseRow === 5) { //don't go past last element
+          break;
         }
       }
-      if (tempRow > 2) { // there must be at least 4 in a row to win
-        if (board[tempRow][j] === currPlayer && board[tempRow - 1][j] === currPlayer && board[tempRow - 2][j] === currPlayer
-          && board[tempRow - 3][j] === currPlayer) {
-          if (currPlayer === 1) {
+      if (traverseRow > 2) { // there must be at least 4 in a row to win
+        if (board[traverseRow][j] === color && board[traverseRow - 1][j] === color && board[traverseRow - 2][j] === color
+          && board[traverseRow - 3][j] === color) {
+          if (color === SQUARE_RED) {
             this.setState({
               redScore: redScore + 1,
               gameWon: true
-            })
-            Alert.alert('Winner', `Player ${currPlayer} has won!`)
-          } else if (currPlayer === 2) {
+            });
+            Alert.alert('Winner', `Player ${color} has won!`);
+          } else if (color === SQUARE_YELLOW) {
             this.setState({
               yellowScore: yellowScore + 1,
               gameWon: true
             });
-            Alert.alert('Winner', `Player ${currPlayer} has won!`)
+            Alert.alert('Winner', `Player ${color} has won!`);
           }
         }
       }
 
       if (j < 6) { //if possible, traverse to the right
-        let tempCol = j;
+        let traverseCol = j;
 
-        while (board[i][tempCol + 1] === currPlayer) {
-          tempCol++;
-          if (tempCol === 6) { //don't go past last element
-            break
+        while (board[i][traverseCol + 1] === color) {
+          traverseCol++;
+          if (traverseCol === 6) { //don't go past last element
+            break;
           }
         }
 
-        if (tempRow > 2) { // there must be at least 4 in a row to win
-          if (board[i][tempCol] === currPlayer && board[i][tempCol - 1] === currPlayer && board[i][tempCol - 2] === currPlayer
-            && board[i][tempCol - 3] === currPlayer) {
-            if (currPlayer === 1) {
+        if (traverseRow > 2) { // there must be at least 4 in a row to win
+          if (board[i][traverseCol] === color && board[i][traverseCol - 1] === color && board[i][traverseCol - 2] === color
+            && board[i][traverseCol - 3] === color) {
+            if (color === SQUARE_RED) {
               this.setState({
                 redScore: redScore + 1,
                 gameWon: true
               });
-              Alert.alert('Winner', `Player ${currPlayer} has won!`)
-            } else if (currPlayer === 2) {
+              Alert.alert('Winner', `Player ${color} has won!`);
+            } else if (color === SQUARE_YELLOW) {
               this.setState({
                 yellowScore: yellowScore + 1,
                 gameWon: true
               });
-              Alert.alert('Winner', `Player ${currPlayer} has won!`)
+              Alert.alert('Winner', `Player ${color} has won!`);
             }
           }
         }
       } else { //case for if user clicks on the last column
-        if (board[i][j] === currPlayer && board[i][j - 1] === currPlayer && board[i][j - 2] === currPlayer
-          && board[i][j - 3] === currPlayer) {
-          if (currPlayer === 1) {
+        if (board[i][j] === color && board[i][j - 1] === color && board[i][j - 2] === color
+          && board[i][j - 3] === color) {
+          if (color === 1) {
             this.setState({
               redScore: redScore + 1,
               gameWon: true
-            })
-            Alert.alert('Winner', `Player ${currPlayer} has won!`)
-          } else if (currPlayer === 2) {
+            });
+            Alert.alert('Winner', `Player ${color} has won!`);
+          } else if (color === 2) {
             this.setState({
               yellowScore: yellowScore + 1,
               gameWon: true
-            })
-            Alert.alert('Winner', `Player ${currPlayer} has won!`)
+            });
+            Alert.alert('Winner', `Player ${color} has won!`);
           }
         }
       }
@@ -153,44 +160,29 @@ export default class App extends Component {
   }
 
   renderSquare(row, column) {
-    const redOrYellow = this.state.board[row][column]
-    if (redOrYellow === SQUARE_RED) {
-      return <TouchableHighlight onPress={() => this.handleClick(row, column)}>
+    const color = this.state.board[row][column];
+    return (
+      <TouchableHighlight onPress={() => this.handleClick(row, column)}>
         <View style={styles.tile}>
-          <Icon name={"circle"} style={styles.red}/>
+          <Icon name={"circle"} style={styles[SQUARE_MAP[color]]}/>
         </View>
       </TouchableHighlight>
-    } else if (redOrYellow === SQUARE_YELLOW) {
-      return <TouchableHighlight onPress={() => this.handleClick(row, column)}>
-        <View style={styles.tile}>
-          <Icon name={"circle"} style={styles.yellow}/>
-        </View>
-      </TouchableHighlight>
-    } else {
-      return <TouchableHighlight onPress={() => this.handleClick(row, column)}>
-        <View style={styles.tile}>
-          <Icon name={"circle"} style={styles.white}/>
-        </View>
-      </TouchableHighlight>
-    }
+    );
   }
-
 
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.header}> Connect Four </Text>
-        {
-          this.state.board.map((row, rowIndex) => {
-            return (
-              <View style={styles.row} key={rowIndex}>
-                {row.map((col, colIndex) => {
-                  return this.renderSquare(rowIndex, colIndex)
-                })}
-              </View>
-            )
-          })
-        }
+        {this.state.board.map((row, rowIndex) => {
+          return (
+            <View style={styles.row} key={rowIndex}>
+              {row.map((col, colIndex) => {
+                return this.renderSquare(rowIndex, colIndex)
+              })}
+            </View>
+          );
+        })}
 
         <Text style={styles.leaderBoard}>
           Player 1's Score: {this.state.redScore}
