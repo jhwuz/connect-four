@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Alert, Button, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import {Button, Alert, TouchableHighlight} from 'react-native'
-
-
 
 type Props = {};
 
@@ -84,12 +81,13 @@ export default class App extends Component<Props> {
     const currPlayer = board[i][j]
     const redScore = this.state.redScore
     const yellowScore = this.state.yellowScore
+
     if (i < 5){ //if possible, traverse down
       let tempRow = i
 
       while(board[tempRow+1][j] === currPlayer) {
         tempRow++
-        if (tempRow === 5){
+        if (tempRow === 5){ //don't go past last element
           break
         }
       }
@@ -118,10 +116,11 @@ export default class App extends Component<Props> {
 
         while (board[i][tempCol+1] === currPlayer) {
           tempCol++
-          if (tempCol === 6) {
+          if (tempCol === 6) { //don't go past last element
             break
           }
         }
+
         if (tempRow > 2) { // there must be at least 4 in a row to win
           if (board[i][tempCol] === currPlayer && board[i][tempCol - 1] === currPlayer && board[i][tempCol - 2] === currPlayer
               && board[i][tempCol - 3] === currPlayer) {
@@ -129,15 +128,33 @@ export default class App extends Component<Props> {
               this.setState({
                 redScore: redScore + 1,
                 gameWon: true
-              })
+              });
               Alert.alert('Winner', `Player ${currPlayer} has won!`)
             } else if (currPlayer === 2) {
               this.setState({
                 yellowScore: yellowScore + 1,
                 gameWon: true
-              })
+              });
               Alert.alert('Winner', `Player ${currPlayer} has won!`)
             }
+          }
+        }
+      }
+      else{ //case for if user clicks on the last column
+        if (board[i][j] === currPlayer && board[i][j - 1] === currPlayer && board[i][j - 2] === currPlayer
+            && board[i][j - 3] === currPlayer) {
+          if (currPlayer === 1) {
+            this.setState({
+              redScore: redScore + 1,
+              gameWon: true
+            })
+            Alert.alert('Winner', `Player ${currPlayer} has won!`)
+          } else if (currPlayer === 2) {
+            this.setState({
+              yellowScore: yellowScore + 1,
+              gameWon: true
+            })
+            Alert.alert('Winner', `Player ${currPlayer} has won!`)
           }
         }
       }
@@ -175,61 +192,72 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text style={styles.header}> Connect Four </Text>
+        {
+          this.state.board.map((row, rowIndex) =>{
+            return (
+            <View style={styles.row} key={rowIndex}>
+                {row.map((col, colIndex) => {
+                    return this.square(rowIndex, colIndex)
+                })}
+            </View>
+            )
+          })
+        }
 
-        <View style={styles.row}>
-          {this.square(0, 0)}
-          {this.square(0, 1)}
-          {this.square(0, 2)}
-          {this.square(0, 3)}
-          {this.square(0, 4)}
-          {this.square(0, 5)}
-          {this.square(0, 6)}
-        </View>
-        <View style={styles.row}>
-          {this.square(1, 0)}
-          {this.square(1, 1)}
-          {this.square(1, 2)}
-          {this.square(1, 3)}
-          {this.square(1, 4)}
-          {this.square(1, 5)}
-          {this.square(1, 6)}
-        </View>
-        <View style={styles.row}>
-          {this.square(2, 0)}
-          {this.square(2, 1)}
-          {this.square(2, 2)}
-          {this.square(2, 3)}
-          {this.square(2, 4)}
-          {this.square(2, 5)}
-          {this.square(2, 6)}
-        </View>
-        <View style={styles.row}>
-          {this.square(3, 0)}
-          {this.square(3, 1)}
-          {this.square(3, 2)}
-          {this.square(3, 3)}
-          {this.square(3, 4)}
-          {this.square(3, 5)}
-          {this.square(3, 6)}
-        </View>
-        <View style={styles.row}>
-          {this.square(4, 0)}
-          {this.square(4, 1)}
-          {this.square(4, 2)}
-          {this.square(4, 3)}
-          {this.square(4, 4)}
-          {this.square(4, 5)}
-          {this.square(4, 6)}
-        </View>
-        <View style={styles.row}>
-          {this.square(5, 0)}
-          {this.square(5, 1)}
-          {this.square(5, 2)}
-          {this.square(5, 3)}
-          {this.square(5, 4)}
-          {this.square(5, 5)}
-          {this.square(5, 6)}
-        </View>
+        {/*<View style={styles.row}>*/}
+          {/*{this.square(0, 0)}*/}
+          {/*{this.square(0, 1)}*/}
+          {/*{this.square(0, 2)}*/}
+          {/*{this.square(0, 3)}*/}
+          {/*{this.square(0, 4)}*/}
+          {/*{this.square(0, 5)}*/}
+          {/*{this.square(0, 6)}*/}
+        {/*</View>*/}
+        {/*<View style={styles.row}>*/}
+          {/*{this.square(1, 0)}*/}
+          {/*{this.square(1, 1)}*/}
+          {/*{this.square(1, 2)}*/}
+          {/*{this.square(1, 3)}*/}
+          {/*{this.square(1, 4)}*/}
+          {/*{this.square(1, 5)}*/}
+          {/*{this.square(1, 6)}*/}
+        {/*</View>*/}
+        {/*<View style={styles.row}>*/}
+          {/*{this.square(2, 0)}*/}
+          {/*{this.square(2, 1)}*/}
+          {/*{this.square(2, 2)}*/}
+          {/*{this.square(2, 3)}*/}
+          {/*{this.square(2, 4)}*/}
+          {/*{this.square(2, 5)}*/}
+          {/*{this.square(2, 6)}*/}
+        {/*</View>*/}
+        {/*<View style={styles.row}>*/}
+          {/*{this.square(3, 0)}*/}
+          {/*{this.square(3, 1)}*/}
+          {/*{this.square(3, 2)}*/}
+          {/*{this.square(3, 3)}*/}
+          {/*{this.square(3, 4)}*/}
+          {/*{this.square(3, 5)}*/}
+          {/*{this.square(3, 6)}*/}
+        {/*</View>*/}
+        {/*<View style={styles.row}>*/}
+          {/*{this.square(4, 0)}*/}
+          {/*{this.square(4, 1)}*/}
+          {/*{this.square(4, 2)}*/}
+          {/*{this.square(4, 3)}*/}
+          {/*{this.square(4, 4)}*/}
+          {/*{this.square(4, 5)}*/}
+          {/*{this.square(4, 6)}*/}
+        {/*</View>*/}
+        {/*<View style={styles.row}>*/}
+          {/*{this.square(5, 0)}*/}
+          {/*{this.square(5, 1)}*/}
+          {/*{this.square(5, 2)}*/}
+          {/*{this.square(5, 3)}*/}
+          {/*{this.square(5, 4)}*/}
+          {/*{this.square(5, 5)}*/}
+          {/*{this.square(5, 6)}*/}
+        {/*</View>*/}
 
 
 
