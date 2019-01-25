@@ -75,24 +75,51 @@ export default class App extends Component {
     this.checkWinner(row, col);
   }
 
-  checkWinner(i, j) {
+  checkWinner(row, col) {
     const board = this.state.board
-    const color = board[i][j]
+    const color = board[row][col]
     const redScore = this.state.redScore
     const yellowScore = this.state.yellowScore
 
-    if (i < 5) { //if possible, traverse down
-      let traverseRow = i;
-
-      while (board[traverseRow + 1][j] === color) {
-        traverseRow++;
-        if (traverseRow === 5) { //don't go past last element
-          break;
+    for (let i = 0; i < 3; i++) {
+      if (board[i][col] === color && board[i + 1][col] === color && board[i + 2][col] === color && board[i + 3][col] === color) {
+        if (color === SQUARE_RED) {
+          this.setState({
+            redScore: redScore + 1,
+            gameWon: true
+          });
+          Alert.alert('Winner', `Player ${color} has won!`);
+        } else if (color === SQUARE_YELLOW) {
+          this.setState({
+            yellowScore: yellowScore + 1,
+            gameWon: true
+          });
+          Alert.alert('Winner', `Player ${color} has won!`);
         }
       }
-      if (traverseRow > 2) { // there must be at least 4 in a row to win
-        if (board[traverseRow][j] === color && board[traverseRow - 1][j] === color && board[traverseRow - 2][j] === color
-          && board[traverseRow - 3][j] === color) {
+    }
+
+    for (let j = 0; j < 4; j++) {
+      if (board[row][j] === color && board[row][j + 1] === color && board[row][j + 2] === color && board[row][j + 3] === color) {
+        if (color === SQUARE_RED) {
+          this.setState({
+            redScore: redScore + 1,
+            gameWon: true
+          });
+          Alert.alert('Winner', `Player ${color} has won!`);
+        } else if (color === SQUARE_YELLOW) {
+          this.setState({
+            yellowScore: yellowScore + 1,
+            gameWon: true
+          });
+          Alert.alert('Winner', `Player ${color} has won!`);
+        }
+      }
+    }
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 6; j++) {
+        if (board[i][col] === color && board[i + 1][col] === color && board[i + 2][col] === color && board[i + 3][col] === color) {
           if (color === SQUARE_RED) {
             this.setState({
               redScore: redScore + 1,
@@ -108,55 +135,83 @@ export default class App extends Component {
           }
         }
       }
+    }
 
-      if (j < 6) { //if possible, traverse to the right
-        let traverseCol = j;
-
-        while (board[i][traverseCol + 1] === color) {
-          traverseCol++;
-          if (traverseCol === 6) { //don't go past last element
-            break;
-          }
-        }
-
-        if (traverseRow > 2) { // there must be at least 4 in a row to win
-          if (board[i][traverseCol] === color && board[i][traverseCol - 1] === color && board[i][traverseCol - 2] === color
-            && board[i][traverseCol - 3] === color) {
-            if (color === SQUARE_RED) {
-              this.setState({
-                redScore: redScore + 1,
-                gameWon: true
-              });
-              Alert.alert('Winner', `Player ${color} has won!`);
-            } else if (color === SQUARE_YELLOW) {
-              this.setState({
-                yellowScore: yellowScore + 1,
-                gameWon: true
-              });
-              Alert.alert('Winner', `Player ${color} has won!`);
-            }
-          }
-        }
-      } else { //case for if user clicks on the last column
-        if (board[i][j] === color && board[i][j - 1] === color && board[i][j - 2] === color
-          && board[i][j - 3] === color) {
-          if (color === 1) {
-            this.setState({
-              redScore: redScore + 1,
-              gameWon: true
-            });
-            Alert.alert('Winner', `Player ${color} has won!`);
-          } else if (color === 2) {
-            this.setState({
-              yellowScore: yellowScore + 1,
-              gameWon: true
-            });
-            Alert.alert('Winner', `Player ${color} has won!`);
-          }
-        }
-      }
-
-    }//end if
+    // if (i < 5) { //if possible, traverse down
+    //   let traverseRow = i;
+    //
+    //   while (board[traverseRow + 1][j] === color) {
+    //     traverseRow++;
+    //     if (traverseRow === 5) { //don't go past last element
+    //       break;
+    //     }
+    //   }
+    //   if (traverseRow > 2) { // there must be at least 4 in a row to win
+    //     if (board[traverseRow][j] === color && board[traverseRow - 1][j] === color && board[traverseRow - 2][j] === color
+    //       && board[traverseRow - 3][j] === color) {
+    //       if (color === SQUARE_RED) {
+    //         this.setState({
+    //           redScore: redScore + 1,
+    //           gameWon: true
+    //         });
+    //         Alert.alert('Winner', `Player ${color} has won!`);
+    //       } else if (color === SQUARE_YELLOW) {
+    //         this.setState({
+    //           yellowScore: yellowScore + 1,
+    //           gameWon: true
+    //         });
+    //         Alert.alert('Winner', `Player ${color} has won!`);
+    //       }
+    //     }
+    //   }
+    //
+    //   if (j < 6) { //if possible, traverse to the right
+    //     let traverseCol = j;
+    //
+    //     while (board[i][traverseCol + 1] === color) {
+    //       traverseCol++;
+    //       if (traverseCol === 6) { //don't go past last element
+    //         break;
+    //       }
+    //     }
+    //
+    //     if (traverseRow > 2) { // there must be at least 4 in a row to win
+    //       if (board[i][traverseCol] === color && board[i][traverseCol - 1] === color && board[i][traverseCol - 2] === color
+    //         && board[i][traverseCol - 3] === color) {
+    //         if (color === SQUARE_RED) {
+    //           this.setState({
+    //             redScore: redScore + 1,
+    //             gameWon: true
+    //           });
+    //           Alert.alert('Winner', `Player ${color} has won!`);
+    //         } else if (color === SQUARE_YELLOW) {
+    //           this.setState({
+    //             yellowScore: yellowScore + 1,
+    //             gameWon: true
+    //           });
+    //           Alert.alert('Winner', `Player ${color} has won!`);
+    //         }
+    //       }
+    //     }
+    //   } else { //case for if user clicks on the last column
+    //     if (board[i][j] === color && board[i][j - 1] === color && board[i][j - 2] === color
+    //       && board[i][j - 3] === color) {
+    //       if (color === 1) {
+    //         this.setState({
+    //           redScore: redScore + 1,
+    //           gameWon: true
+    //         });
+    //         Alert.alert('Winner', `Player ${color} has won!`);
+    //       } else if (color === 2) {
+    //         this.setState({
+    //           yellowScore: yellowScore + 1,
+    //           gameWon: true
+    //         });
+    //         Alert.alert('Winner', `Player ${color} has won!`);
+    //       }
+    //     }
+    //   }
+    // }//end if
   }
 
   renderSquare(row, column) {
@@ -196,52 +251,53 @@ export default class App extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
-    },
-    tile: {
-      borderWidth: 3,
-      width: 50,
-      height: 50,
-      backgroundColor: 'blue',
-    },
-    button: {
-      width: 50,
-      height: 50,
-      color: 'transparent'
-    },
-    header: {
-      fontSize: 55,
-      fontWeight: 'bold',
+const
+  styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+      },
+      tile: {
+        borderWidth: 3,
+        width: 50,
+        height: 50,
+        backgroundColor: 'blue',
+      },
+      button: {
+        width: 50,
+        height: 50,
+        color: 'transparent'
+      },
+      header: {
+        fontSize: 55,
+        fontWeight: 'bold',
 
 
-    },
-    leaderBoard: {
-      fontSize: 20,
-      fontWeight: 'bold'
-    },
-    yellow: {
-      fontSize: 45,
-      color: 'yellow',
-      textAlign: 'center'
-    },
-    red: {
-      fontSize: 45,
-      color: 'red',
-      textAlign: 'center'
-    },
-    white: {
-      fontSize: 45,
-      color: 'white',
-      textAlign: 'center'
-    },
-    row: {
-      flexDirection: 'row',
-      display: 'flex'
+      },
+      leaderBoard: {
+        fontSize: 20,
+        fontWeight: 'bold'
+      },
+      yellow: {
+        fontSize: 45,
+        color: 'yellow',
+        textAlign: 'center'
+      },
+      red: {
+        fontSize: 45,
+        color: 'red',
+        textAlign: 'center'
+      },
+      white: {
+        fontSize: 45,
+        color: 'white',
+        textAlign: 'center'
+      },
+      row: {
+        flexDirection: 'row',
+        display: 'flex'
+      }
     }
-  }
-);
+  );
