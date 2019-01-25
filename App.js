@@ -47,11 +47,11 @@ export default class App extends Component<Props> {
       return;
     }
 
-    let temp = this.state.board
-    var col = j
+    let board  = this.state.board
     var row = i
+    const col = j
     if (row < 5){ //find the lowest position without a disk and slide down
-        while(temp[row+1][col] !== 1 && temp[row+1][col] !== 2) { //iterate through to the lowest open square
+        while(board[row+1][col] !== 1 && board[row+1][col] !== 2) { //iterate through to the lowest open square
           row++
           if (row == 5){
             break
@@ -66,13 +66,13 @@ export default class App extends Component<Props> {
     let flipTurn = this.state.redTurn
     let turnCount = this.state.turnCount
     if (flipTurn) {
-      temp[row][col] = 1
+      board[row][col] = 1
     }
     else{
-      temp[row][col] = 2
+      board[row][col] = 2
     }
     this.setState({
-      board : temp,
+      board : board,
       redTurn : !flipTurn,
       turnCount : turnCount + 1
     })
@@ -80,25 +80,23 @@ export default class App extends Component<Props> {
   }
 
   checkWinner(i, j){
-    if (this.state.turnCount < 7){ //4 turns have not passed
-      return
-    }
-    const temp = this.state.board
-    const currPlayer = temp[i][j]
+    const board = this.state.board
+    const currPlayer = board[i][j]
     const redScore = this.state.redScore
     const yellowScore = this.state.yellowScore
     if (i < 5){ //if possible, traverse down
       let tempRow = i
       let tempCol = j
-      while(temp[tempRow+1][j] === currPlayer) {
+
+      while(board[tempRow+1][j] === currPlayer) {
         tempRow++
-        if (tempRow == 5){
+        if (tempRow === 5){
           break
         }
       }
-      if (tempRow > 2){
-        if (temp[tempRow][j] === currPlayer && temp[tempRow-1][j] === currPlayer && temp[tempRow-2][j] === currPlayer
-            && temp[tempRow-3][j] === currPlayer){
+      if (tempRow > 2){ // there must be at least 4 in a row to win
+        if (board[tempRow][j] === currPlayer && board[tempRow-1][j] === currPlayer && board[tempRow-2][j] === currPlayer
+            && board[tempRow-3][j] === currPlayer){
           if (currPlayer === 1) {
             this.setState({
               redScore : redScore + 1,
