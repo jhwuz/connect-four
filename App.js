@@ -117,9 +117,29 @@ export default class App extends Component {
       }
     }
 
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 6; j++) {
-        if (board[i][col] === color && board[i + 1][col] === color && board[i + 2][col] === color && board[i + 3][col] === color) {
+    for (let i = 0; i < 3; i++) { //top left down diagonally
+      for (let j = 0; j < 4; j++) {
+        if (board[i][j] === color && board[i + 1][j + 1] === color && board[i + 2][j + 2] === color && board[i + 3][j + 3] === color) {
+          if (color === SQUARE_RED) {
+            this.setState({
+              redScore: redScore + 1,
+              gameWon: true
+            });
+            Alert.alert('Winner', `Player ${color} has won!`);
+          } else if (color === SQUARE_YELLOW) {
+            this.setState({
+              yellowScore: yellowScore + 1,
+              gameWon: true
+            });
+            Alert.alert('Winner', `Player ${color} has won!`);
+          }
+        }
+      }
+    }
+
+    for (let i = 5; i > 2; i--) { //bottom right up diagonally
+      for (let j = 7; j > 3; j--) {
+        if (board[i][j] === color && board[i - 1][j - 1] === color && board[i - 2][j - 2] === color && board[i - 3][j - 3] === color) {
           if (color === SQUARE_RED) {
             this.setState({
               redScore: redScore + 1,
