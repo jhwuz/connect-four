@@ -24,9 +24,29 @@ export default class App extends Component<Props> {
       redTurn: true,
       redScore: 0,
       yellowScore: 0,
+      turnCount : 0,
+      gameWon : false
   }}
 
+  reset(){
+    this.setState({
+      board : [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0]],
+      redTurn : true,
+      gameWon : false
+    })
+  }
+
   handleClick(i, j){
+    if (this.state.gameWon){
+      return;
+    }
+
     let temp = this.state.board
     var col = j
     var row = i
@@ -44,6 +64,7 @@ export default class App extends Component<Props> {
     }
 
     let flipTurn = this.state.redTurn
+    let turnCount = this.state.turnCount
     if (flipTurn) {
       temp[row][col] = 1
     }
@@ -52,9 +73,51 @@ export default class App extends Component<Props> {
     }
     this.setState({
       board : temp,
-      redTurn : !flipTurn
+      redTurn : !flipTurn,
+      turnCount : turnCount + 1
     })
+    this.checkWinner(i, j)
+  }
 
+  checkWinner(i, j){
+    if (this.state.turnCount < 7){ //4 turns have not passed
+      return
+    }
+    const temp = this.state.board
+    const currPlayer = temp[i][j]
+    const redScore = this.state.redScore
+    const yellowScore = this.state.yellowScore
+    if (i < 5){ //if possible, traverse down
+      let tempRow = i
+      let tempCol = j
+      while(temp[tempRow+1][j] === currPlayer) {
+        tempRow++
+        if (tempRow == 5){
+          break
+        }
+      }
+      if (tempRow > 2){
+        if (temp[tempRow][j] === currPlayer && temp[tempRow-1][j] === currPlayer && temp[tempRow-2][j] === currPlayer
+            && temp[tempRow-3][j] === currPlayer){
+          if (currPlayer === 1) {
+            this.setState({
+              redScore : redScore + 1,
+              gameWon : true
+            })
+            Alert.alert('Winner', `Player ${currPlayer} has won!`)
+          }
+          else if (currPlayer === 2){
+            this.setState({
+              yellowScore : yellowScore + 1,
+              gameWon : true
+            })
+            Alert.alert('Winner', `Player ${currPlayer} has won!`)
+          }
+
+        }
+      }
+
+    }//end if
   }
 
   square(row, column){
@@ -151,6 +214,7 @@ export default class App extends Component<Props> {
         <Text style={styles.leaderboard}>
           Player 2's Score: {this.state.yellowScore}
         </Text>
+        <Button title="Restart Game" onPress={() => this.reset()}/>
       </View>
     );
   }
