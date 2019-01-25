@@ -76,7 +76,7 @@ export default class App extends Component<Props> {
       redTurn : !flipTurn,
       turnCount : turnCount + 1
     })
-    this.checkWinner(i, j)
+    this.checkWinner(row, col)
   }
 
   checkWinner(i, j){
@@ -86,7 +86,6 @@ export default class App extends Component<Props> {
     const yellowScore = this.state.yellowScore
     if (i < 5){ //if possible, traverse down
       let tempRow = i
-      let tempCol = j
 
       while(board[tempRow+1][j] === currPlayer) {
         tempRow++
@@ -111,7 +110,35 @@ export default class App extends Component<Props> {
             })
             Alert.alert('Winner', `Player ${currPlayer} has won!`)
           }
+        }
+      }
 
+      if (j < 6) { //if possible, traverse to the right
+        let tempCol = j
+
+        while (board[i][tempCol+1] === currPlayer) {
+          tempCol++
+          if (tempCol === 6) {
+            break
+          }
+        }
+        if (tempRow > 2) { // there must be at least 4 in a row to win
+          if (board[i][tempCol] === currPlayer && board[i][tempCol - 1] === currPlayer && board[i][tempCol - 2] === currPlayer
+              && board[i][tempCol - 3] === currPlayer) {
+            if (currPlayer === 1) {
+              this.setState({
+                redScore: redScore + 1,
+                gameWon: true
+              })
+              Alert.alert('Winner', `Player ${currPlayer} has won!`)
+            } else if (currPlayer === 2) {
+              this.setState({
+                yellowScore: yellowScore + 1,
+                gameWon: true
+              })
+              Alert.alert('Winner', `Player ${currPlayer} has won!`)
+            }
+          }
         }
       }
 
@@ -237,8 +264,9 @@ const styles = StyleSheet.create({
     color : 'transparent'
   },
   header: {
-    fontSize: 50,
-    fontWeight: 'bold'
+    fontSize: 55,
+    fontWeight: 'bold',
+
 
   },
   leaderboard: {
