@@ -138,7 +138,7 @@ export default class App extends Component {
     }
 
     for (let i = 5; i > 2; i--) { //bottom right up diagonally
-      for (let j = 7; j > 3; j--) {
+      for (let j = 6; j > 2; j--) {
         if (board[i][j] === color && board[i - 1][j - 1] === color && board[i - 2][j - 2] === color && board[i - 3][j - 3] === color) {
           if (color === SQUARE_RED) {
             this.setState({
