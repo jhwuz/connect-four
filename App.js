@@ -22,7 +22,6 @@ export default class App extends Component {
       redTurn: true,
       redScore: 0,
       yellowScore: 0,
-      turnCount: 0,
       gameWon: false,
       gameStarted: false
     }
@@ -62,7 +61,6 @@ export default class App extends Component {
     }
 
     let flipTurn = this.state.redTurn;
-    let turnCount = this.state.turnCount;
     if (flipTurn) {
       board[row][col] = 1;
     } else {
@@ -71,7 +69,6 @@ export default class App extends Component {
     this.setState({
       board: board,
       redTurn: !flipTurn,
-      turnCount: turnCount + 1
     });
     this.checkWinner(row, col);
   }
