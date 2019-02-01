@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, Button, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {Alert, Button, StyleSheet, Text, TouchableHighlight, View, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const SQUARE_WHITE = 0;
@@ -23,7 +23,8 @@ export default class App extends Component {
       redScore: 0,
       yellowScore: 0,
       turnCount: 0,
-      gameWon: false
+      gameWon: false,
+      gameStarted: false
     }
   }
 
@@ -169,29 +170,47 @@ export default class App extends Component {
     );
   }
 
-  render() {
+  renderDialogBox() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.header}> Connect Four </Text>
-        {this.state.board.map((row, rowIndex) => {
-          return (
-            <View style={styles.row} key={rowIndex}>
-              {row.map((col, colIndex) => {
-                return this.renderSquare(rowIndex, colIndex)
-              })}
-            </View>
-          );
-        })}
-
-        <Text style={styles.leaderBoard}>
-          Player 1's Score: {this.state.redScore}
-        </Text>
-        <Text style={styles.leaderBoard}>
-          Player 2's Score: {this.state.yellowScore}
-        </Text>
-        <Button title="Restart Game" onPress={() => this.reset()}/>
-      </View>
+      <TextInput
+        style={{height: 40, borderColor: 'yellow', borderWidth: 1}}
+        onChangeText={(text) => this.setState({text})}
+        value={this.state.text}/>
     );
+  }
+
+  render() {
+    if (this.state.gameStarted) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.header}> Connect Four </Text>
+          {this.state.board.map((row, rowIndex) => {
+            return (
+              <View style={styles.row} key={rowIndex}>
+                {row.map((col, colIndex) => {
+                  return this.renderSquare(rowIndex, colIndex)
+                })}
+              </View>
+            );
+          })}
+
+          <Text style={styles.leaderBoard}>
+            Player 1's Score: {this.state.redScore}
+          </Text>
+          <Text style={styles.leaderBoard}>
+            Player 2's Score: {this.state.yellowScore}
+          </Text>
+          <Button title="Restart Game" onPress={() => this.reset()}/>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.header}> Welcome to Connect Four</Text>
+          <Button title={"Start Game"} onPress={() => this.renderDialogBox()}/>
+        </View>
+      )
+    }
   }
 }
 
